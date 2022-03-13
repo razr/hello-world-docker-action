@@ -3,6 +3,6 @@ on:
 
 jobs:
   call-workflow-passing-data:
-    uses: ./.github/workflows/reusable-workflow.yml@main
+    uses: ./.github/workflows/reusable_workflow.yml
     with:
       username: razr
