@@ -1,6 +1,12 @@
 on: 
-  push:
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      uname_r:
+        description: 'raspi release'
+        default: '5.4.0-1055-raspi'
+        required: true
+        type: string
 
 jobs:
   hello_world_job:
@@ -11,7 +17,7 @@ jobs:
         id: hello
         uses: razr/hello-world-docker-action@v1
         with:
-          who-to-greet: 'Mona the Octocat'
+          who-to-greet: ${{ inputs.uname_r }}
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
