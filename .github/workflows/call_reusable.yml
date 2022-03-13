@@ -1,0 +1,7 @@
+on:
+  workflow_dispatch:
+jobs:
+  call-workflow-passing-data:
+    uses: .github/workflows/reusable-workflow.yml@main
+    with:
+      username: razr
