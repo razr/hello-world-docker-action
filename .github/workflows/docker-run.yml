@@ -1,0 +1,17 @@
+name: 'docker run test'
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  docker_run:
+    runs-on: ubuntu-20.04
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Docker run
+        run: |
+          docker pull ubuntu-18.04
+          mkdir /tmo/wrsdk-up2
+          docker run --rm -v `ls -d /tmp/wrsdk-*`:/wrsdk -v ${{ github.workspace }}:/work ubuntu-18.04 ls /wrsdk && ls /work
