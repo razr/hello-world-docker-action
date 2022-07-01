@@ -8,12 +8,28 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
 
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Build docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: Docker/vxbuild/.
+          push: false
+          tags: vxbuild:1.0
+
+      - name: Build docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: Docker/vxros2build/.
+          push: false
+          tags: vxros2build:1.0
+
 
       - name: Docker run
-        run: |
-          docker pull ubuntu:18.04
-          mkdir -p /tmp/wrsdk-up2
-          touch /tmp/wrsdk-up2/test
-          ls ${{ github.workspace }}
-          docker run --rm -v `ls -d /tmp/wrsdk-*`:/wrsdk -v ${{ github.workspace }}:/work ubuntu:18.04 ls /wrsdk && cat /work/action.yml
+        uses: addnab/docker-run-action@v3
+        with:
+          image: vxros2build:1.0
+          options: -v ${{ github.workspace }}:/work
+          run:  |
+            ls /work
