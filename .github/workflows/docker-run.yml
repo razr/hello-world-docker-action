@@ -16,4 +16,4 @@ jobs:
           mkdir -p /tmp/wrsdk-up2
           touch /tmp/wrsdk-up2/test
           ls ${{ github.workspace }}
-          docker run --rm -v `ls -d /tmp/wrsdk-*`:/wrsdk -v ${{ github.workspace }}:/work ubuntu:18.04 ls /wrsdk && ls /
+          docker run --rm -v `ls -d /tmp/wrsdk-*`:/wrsdk -v ${{ github.workspace }}:/work ubuntu:18.04 ls /wrsdk && cat /work/action.yml
