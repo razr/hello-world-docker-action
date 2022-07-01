@@ -43,4 +43,4 @@ jobs:
           image: vxros2build:1.0
           options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk-vxworks7-up2:/wrsdk
           run:  |
-             source /wrsdk/toolkit/wind_sdk_env.linux && make
+             source /wrsdk/toolkit/wind_sdk_env.linux && make -C /work
