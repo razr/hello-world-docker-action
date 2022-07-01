@@ -25,11 +25,22 @@ jobs:
           push: false
           tags: vxros2build:1.0
 
+      - name: Download a file
+        uses: carlosperate/download-file-action@v1
+        with:
+          file-url: 'https://labs.windriver.com/downloads/wrsdk-vxworks7-up2-1.7.tar.bz2'
+          location: '/tmp'
+          md5: 'c64fe30a496af66df771f2073f898276'
+
+      - name: Extract
+        run: |
+          cd /tmp
+          tar xvfj wrsdk-vxworks7-up2-1.7.tar.bz2
 
       - name: Docker run
         uses: addnab/docker-run-action@v3
         with:
           image: vxros2build:1.0
-          options: -v ${{ github.workspace }}:/work
+          options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk-vxworks7-up2:/wrsdk
           run:  |
-            ls /work
+             source /wrsdk/toolkit/wind_sdk_env.linux && make
