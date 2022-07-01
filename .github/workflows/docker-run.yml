@@ -13,5 +13,6 @@ jobs:
       - name: Docker run
         run: |
           docker pull ubuntu:18.04
-          mkdir /tmo/wrsdk-up2
+          mkdir -p /tmp/wrsdk-up2
+          touch /tmp/wrsdk-up2/test
           docker run --rm -v `ls -d /tmp/wrsdk-*`:/wrsdk -v ${{ github.workspace }}:/work ubuntu:18.04 ls /wrsdk && ls /work
