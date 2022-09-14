@@ -23,4 +23,4 @@ jobs:
 
       - name: Get uid and gid
         run: |
-          echo "url: `jq '.vxros2build[] | select(.sdk == ${{ matrix.sdk }}) | {url} | .url' ./.github/workflows/vxros2build.json`"
+          echo "url: `jq '.vxros2build[] | select(.sdk == \"${{ matrix.sdk }}\") | {url} | .url' ./.github/workflows/vxros2build.json`"
