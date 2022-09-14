@@ -23,7 +23,14 @@ jobs:
 
       - name: Setup
         run: |
-          jq '[.vxros2build[] | select(.sdk == "${{ matrix.sdk }}") | {url} | .url][0]' ./.github/workflows/vxros2build.json
-          jq '[.vxros2build[] | select(.branch == "${{ matrix.branch }}") | {docker} | .docker][0]' ./.github/workflows/vxros2build.json
-          jq '[.vxros2build[] | select(.sdk == "${{ matrix.sdk }}") | {script} | .script][0]' ./.github/workflows/vxros2build.json
-          jq '[.vxros2build[] | select(.sdk == "${{ matrix.sdk }}") | {image} | .image][0]' ./.github/workflows/vxros2build.json
+          echo "url=`jq '[.vxros2build[] | select(.sdk == \"${{ matrix.sdk }}\") | {url} | .url][0]' ./.github/workflows/vxros2build.json`" >> $GITHUB_ENV
+          echo "docker=`jq '[.vxros2build[] | select(.branch == \"${{ matrix.branch }}\") | {docker} | .docker][0]' ./.github/workflows/vxros2build.json`" >> $GITHUB_ENV
+          echo "script=`jq '[.vxros2build[] | select(.sdk == \"${{ matrix.sdk }}\") | {script} | .script][0]' ./.github/workflows/vxros2build.json`" >> $GITHUB_ENV
+          echo "image=`jq '[.vxros2build[] | select(.sdk == \"${{ matrix.sdk }}\") | {image} | .image][0]' ./.github/workflows/vxros2build.json`" >> $GITHUB_ENV
+
+      - name: Env
+        run: |
+          echo "${{ env.url }}"
+          echo "${{ env.docker }}"
+          echo "${{ env.script }}"
+          echo "${{ env.image }}"
