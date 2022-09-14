@@ -16,5 +16,21 @@
       "script": "./toolkit/wind_sdk_env.linux",
       "image": "./bsps/*/boot/vxWorks"
     }
+    {
+      "sdk": "wrsdk-vxworks7-qemu-1.10",
+      "url": "https://d13321s3lxgewa.cloudfront.net/wrsdk-vxworks7-qemu-1.10.tar.bz2",
+      "branch": "dashing-release-22.03",
+      "docker": "docker://razr/vxros2build:1.0",
+      "script": "./sdkenv.sh",
+      "image": "./vxsdk/bsps/*/vxWorks"
+    }
+    {
+      "sdk": "wrsdk-vxworks7-qemu-1.10",
+      "url": "https://d13321s3lxgewa.cloudfront.net/wrsdk-vxworks7-qemu-1.10.tar.bz2",
+      "branch": "humble-release-22.03",
+      "docker": "docker://razr/vxros2build:humble",
+      "script": "./sdkenv.sh",
+      "image": "./vxsdk/bsps/*/vxWorks"
+    }
   ]
 }
