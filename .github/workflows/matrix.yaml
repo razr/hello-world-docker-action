@@ -1,0 +1,26 @@
+name: 'VxWorks ROS2 build'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        branch: [dashing-release-SR0640 dashing-release-22.03 humble-release-22.03]
+        include:
+          - branch: dashing-release-SR0640
+            sdk: wrsdk-vxworks7-up2-1.7
+          - branch: dashing-release-SR0640
+            sdk: wrsdk-vxworks7-raspberrypi4b-1.0
+          - branch: dashing-release-22.03
+            sdk: wrsdk-vxworks7-qemu-1.10
+          - branch: humble-release-22.03
+            sdk: wrsdk-vxworks7-qemu-1.10
+
+    runs-on: ubuntu-20.04
+    steps:
+
+      - name: Get uid and gid
+        run: |
+          echo "${{ matrix.branch }}  ${{ matrix.sdk }}"
