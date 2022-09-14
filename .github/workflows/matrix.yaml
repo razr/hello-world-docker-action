@@ -18,6 +18,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
 
+      - name: Checks-out a branch ${{ matrix.branch }}
+        uses: actions/checkout@v2
+
       - name: Get uid and gid
         run: |
-          echo "${{ matrix.branch }}  ${{ matrix.sdk }}"
+          echo "url: `jq '.vxros2build[] | select(.sdk == "${{ matrix.sdk }}") | {url} | .url' ./.github/workflows/vxros2build.json`"
