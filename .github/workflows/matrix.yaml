@@ -43,9 +43,6 @@ jobs:
           location: '${{ runner.temp }}/_github_home'
 
       - name: Build ROS2 ${{ matrix.branch }} against VxWorks ${{ matrix.sdk }}
-        env:
-          UID: ${{ env.uid }}
-          GID: ${{ env.gid }}
-        uses: docker://razr/vxros2build:`echo 1.0`
-        with:
-          args: ls
+        run: |
+          docker pull ${{ env.docker }}
+          docker run --name vxros2build --rm vxros2build:1.0 ls
