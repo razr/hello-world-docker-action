@@ -45,6 +45,7 @@ jobs:
         env:
           UID: ${{ env.uid }}
           GID: ${{ env.gid }}
-        uses: docker://razr/vxros2build:`echo ${{ matrix.branch }} | cut -d '-' -f 1`
+          version: 1.0
+        uses: docker://razr/vxros2build:${{ version }}
         with:
           args: ls
