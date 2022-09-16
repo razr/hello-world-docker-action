@@ -44,5 +44,5 @@ jobs:
 
       - name: Build ROS2 ${{ matrix.branch }} against VxWorks ${{ matrix.sdk }}
         run: |
-          docker pull ${{ env.docker }}
-          docker run --name vxros2build --rm vxros2build:1.0 ls
+          docker pull `echo ${{ env.docker }} | cut -d '/' -f 3-4`
+          docker run --name vxros2build --rm `echo ${{ env.docker }} | cut -d '/' -f 3-4` ls
