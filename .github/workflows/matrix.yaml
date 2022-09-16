@@ -46,6 +46,6 @@ jobs:
         env:
           UID: ${{ env.uid }}
           GID: ${{ env.gid }}
-        uses: docker://razr/vxros2build:${{ env.version }}
+        uses: docker://razr/vxros2build:`echo 1.0`
         with:
           args: ls
