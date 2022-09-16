@@ -27,6 +27,7 @@ jobs:
           echo "docker=`jq -r '[.vxros2build[] | select(.branch == \"${{ matrix.branch }}\") | {docker} | .docker][0]' ./.github/workflows/vxros2build.json`" >> $GITHUB_ENV
           echo "script=`jq -r '[.vxros2build[] | select(.sdk == \"${{ matrix.sdk }}\") | {script} | .script][0]' ./.github/workflows/vxros2build.json`" >> $GITHUB_ENV
           echo "image=`jq -r '[.vxros2build[] | select(.sdk == \"${{ matrix.sdk }}\") | {image} | .image][0]' ./.github/workflows/vxros2build.json`" >> $GITHUB_ENV
+          echo "version=1.0" >> $GITHUB_ENV
 
       - name: Env
         run: |
@@ -45,7 +46,6 @@ jobs:
         env:
           UID: ${{ env.uid }}
           GID: ${{ env.gid }}
-          version: 1.0
-        uses: docker://razr/vxros2build:${{ version }}
+        uses: docker://razr/vxros2build:${{ env.version }}
         with:
           args: ls
