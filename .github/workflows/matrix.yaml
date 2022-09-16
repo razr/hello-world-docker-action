@@ -40,3 +40,11 @@ jobs:
         with:
           file-url: '${{ env.url }}'
           location: '${{ runner.temp }}/_github_home'
+
+      - name: Build ROS2 ${{ matrix.branch }} against VxWorks ${{ matrix.sdk }}
+        env:
+          UID: ${{ env.uid }}
+          GID: ${{ env.gid }}
+        uses: docker://razr/vxros2build:`echo ${{ matrix.branch }} | cut -d '-' -f 1`
+        with:
+          args: ls
