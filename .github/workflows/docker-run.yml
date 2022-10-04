@@ -65,4 +65,4 @@ jobs:
           UID: ${{ env.uid }}
           GID: ${{ env.gid }}
         run:  |
-          docker run --rm -v "/var/run/docker.sock":"/var/run/docker.sock" vxbuild:1.0 cat id && cat /etc/lsb-release && printenv
+          docker run --rm -v "/var/run/docker.sock":"/var/run/docker.sock" vxbuild:1.0 id && cat /etc/lsb-release && printenv
