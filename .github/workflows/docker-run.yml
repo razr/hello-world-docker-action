@@ -59,8 +59,8 @@ jobs:
           options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
           run:  |
             ls -la /wrsdk/test
-            groupadd -g ${{ env.gid }} wruser
-            useradd -u ${{ env.uid }} -m wruser -g ${{ env.gid }}
+            groupadd -g 121 wruser
+            useradd -u 1001 -m wruser -g 121
             echo -e 'wruser\nwruser\n' | passwd wruser
             su -l wruser
             cat /wrsdk/test
