@@ -57,4 +57,4 @@ jobs:
           image: vxbuild:1.0
           options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
           run:  |
-             cat /wrsdk/test && id && cat /etc/lsb-release
+             cat /wrsdk/test && id && cat /etc/lsb-release && printenv
