@@ -18,12 +18,12 @@ jobs:
           push: false
           tags: vxbuild:1.0
 
-#      - name: Build docker image
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: Docker/vxros2build/.
-#          push: false
-#          tags: vxros2build:1.0
+ #     - name: Build docker image
+ #       uses: docker/build-push-action@v3
+ #       with:
+ #         context: Docker/vxros2build/.
+ #         push: false
+ #         tags: vxros2build:1.0
 
 #      - name: Download a file
 #        uses: carlosperate/download-file-action@v1
@@ -48,4 +48,4 @@ jobs:
           image: vxbuild:1.0
           options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
           run:  |
-             cat /wrsdk/test
+             cat /wrsdk/test && id
