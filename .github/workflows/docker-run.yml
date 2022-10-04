@@ -1,4 +1,5 @@
 name: 'docker run test'
+# old repo, not supported and not working properly
 
 on: 
   workflow_dispatch:
@@ -48,13 +49,20 @@ jobs:
           echo "gid=`id -g`" >> $GITHUB_ENV
           docker image list
 
+#      - name: Docker run
+#        env:
+#          UID: ${{ env.uid }}
+#          GID: ${{ env.gid }}
+#        uses: addnab/docker-run-action@v3
+#        with:
+#          image: vxbuild:1.0
+#          options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
+#          run:  |
+#             cat /wrsdk/test && id && cat /etc/lsb-release && printenv
+
       - name: Docker run
         env:
           UID: ${{ env.uid }}
           GID: ${{ env.gid }}
-        uses: addnab/docker-run-action@v3
-        with:
-          image: vxbuild:1.0
-          options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
-          run:  |
-             cat /wrsdk/test && id && cat /etc/lsb-release && printenv
+        run:  |
+          docker run --rm -v "/var/run/docker.sock":"/var/run/docker.sock" vxbuild:1.0 cat id && cat /etc/lsb-release && printenv
