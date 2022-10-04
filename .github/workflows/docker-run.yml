@@ -45,9 +45,8 @@ jobs:
 
       - name: Setup environment
         run: |
-          echo "uid=`id -u`" >> $GITHUB_ENV
-          echo "gid=`id -g`" >> $GITHUB_ENV
-          docker image list
+          echo "`id -u`" > /tmp/wrsdk/uid
+          echo "`id -g`" > /tmp/wrsdk/gid
 
       - name: Docker run
         env:
@@ -60,8 +59,9 @@ jobs:
           options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
           run:  |
             ls -la /wrsdk/test
-            groupadd -g 121 wruser
-            useradd -u 1001 -m wruser -g 121
+            ls -la /work
+            groupadd -g "`cat /wrsdk/gid`" wruser
+            useradd -u "`cat /wrsdk/uid`" -m wruser -g wruser
             su wruser -c 'cat /wrsdk/test'
             su wruser -c 'id'
             su wruser -c 'cat /etc/lsb-release && printenv'
