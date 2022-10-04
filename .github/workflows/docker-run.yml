@@ -61,7 +61,6 @@ jobs:
             ls -la /wrsdk/test
             groupadd -g 121 wruser
             useradd -u 1001 -m wruser -g 121
-            echo -e 'wruser\nwruser\n' | passwd wruser
             su -l wruser
             cat /wrsdk/test
             id
