@@ -59,7 +59,13 @@ jobs:
           options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
           run:  |
             ls -la /wrsdk/test
-            cat /wrsdk/test && id && cat /etc/lsb-release && printenv
+            groupadd -g ${{ env.gid }} wruser
+            useradd -u ${{ env.uid }} -m wruser -g ${{ env.gid }}
+            echo -e 'wruser\nwruser\n' | passwd wruser
+            su -l wruser
+            cat /wrsdk/test
+            id
+            cat /etc/lsb-release && printenv
             cat /etc/passwd
 
 #      - name: Docker run
