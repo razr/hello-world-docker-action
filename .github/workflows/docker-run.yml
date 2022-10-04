@@ -49,20 +49,24 @@ jobs:
           echo "gid=`id -g`" >> $GITHUB_ENV
           docker image list
 
-#      - name: Docker run
-#        env:
-#          UID: ${{ env.uid }}
-#          GID: ${{ env.gid }}
-#        uses: addnab/docker-run-action@v3
-#        with:
-#          image: vxbuild:1.0
-#          options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
-#          run:  |
-#             cat /wrsdk/test && id && cat /etc/lsb-release && printenv
-
       - name: Docker run
         env:
           UID: ${{ env.uid }}
           GID: ${{ env.gid }}
-        run:  |
-          docker run --rm -v "/var/run/docker.sock":"/var/run/docker.sock" vxbuild:1.0 id && cat /etc/lsb-release && printenv
+        uses: addnab/docker-run-action@v3
+        with:
+          image: vxbuild:1.0
+          options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
+          run:  |
+            useradd -m wruser -g wruser
+            echo -e 'wruser\nwruser\n' | passwd wruser
+            su -l wruser
+            cat /wrsdk/test && id && cat /etc/lsb-release && printenv
+
+#      - name: Docker run
+#      ends up in the runner container
+#        env:
+#          UID: ${{ env.uid }}
+#          GID: ${{ env.gid }}
+#        run:  |
+#          docker run --rm -v "/var/run/docker.sock":"/var/run/docker.sock" vxbuild:1.0 id && cat /etc/lsb-release && printenv
