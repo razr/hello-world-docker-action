@@ -58,10 +58,9 @@ jobs:
           image: vxbuild:1.0
           options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
           run:  |
-            useradd -m wruser -g wruser
-            echo -e 'wruser\nwruser\n' | passwd wruser
-            su -l wruser
+            ls -la /wrsdk/test
             cat /wrsdk/test && id && cat /etc/lsb-release && printenv
+            cat /etc/passwd
 
 #      - name: Docker run
 #      ends up in the runner container
