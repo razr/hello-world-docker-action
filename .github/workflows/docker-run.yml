@@ -42,15 +42,15 @@ jobs:
           mkdir -p /tmp/wrsdk
           echo "This is a test" > /tmp/wrsdk/test
 
-      - name: Setup environment
-        run: |
-          echo "UID=`id -u`" >> $GITHUB_ENV
-          echo "GID=`id -g`" >> $GITHUB_ENV
+#      - name: Setup environment
+#        run: |
+#          echo "UID=`id -u`" >> $GITHUB_ENV
+#          echo "GID=`id -g`" >> $GITHUB_ENV
 
       - name: Docker run
         uses: addnab/docker-run-action@v3
         with:
           image: vxbuild:1.0
-          options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
+          options: -e UID=2000 -e GID=2000 -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
           run:  |
-             cat /wrsdk/test && id
+             cat /wrsdk/test && id && cat /etc/lsb-release
