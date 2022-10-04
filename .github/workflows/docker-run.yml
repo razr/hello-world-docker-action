@@ -62,10 +62,10 @@ jobs:
             ls -la /wrsdk/test
             groupadd -g 121 wruser
             useradd -u 1001 -m wruser -g 121
-            su wruser cat /wrsdk/test
-            su wruser id
-            su wruser cat /etc/lsb-release && printenv
-            su wruser cat /etc/passwd
+            su wruser -c 'cat /wrsdk/test'
+            su wruser -c 'id'
+            su wruser -c 'cat /etc/lsb-release && printenv'
+            su wruser -c 'cat /etc/passwd'
 
 #      - name: Docker run
 #      ends up in the runner container
