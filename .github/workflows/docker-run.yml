@@ -46,6 +46,7 @@ jobs:
         run: |
           echo "uid=`id -u`" >> $GITHUB_ENV
           echo "gid=`id -g`" >> $GITHUB_ENV
+          docker image list
 
       - name: Docker run
         env:
