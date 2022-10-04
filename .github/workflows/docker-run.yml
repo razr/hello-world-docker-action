@@ -18,12 +18,12 @@ jobs:
           push: false
           tags: vxbuild:1.0
 
-      - name: Build docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: Docker/vxros2build/.
-          push: false
-          tags: vxros2build:1.0
+#      - name: Build docker image
+#        uses: docker/build-push-action@v3
+#        with:
+#          context: Docker/vxros2build/.
+#          push: false
+#          tags: vxros2build:1.0
 
 #      - name: Download a file
 #        uses: carlosperate/download-file-action@v1
@@ -39,15 +39,13 @@ jobs:
 
       - name: Extract
         run: |
-          cd /tmp
-          mkdir wrsdk-vxworks7-up2
-          touch ./wrsdk-vxworks7-up2/test
-          mv wrsdk-vxworks7-up2 wrsdk
+          mkdir -p /tmp/wrsdk
+          echo "This is a test" > /tmp/wrsdk/test
 
       - name: Docker run
         uses: addnab/docker-run-action@v3
         with:
-          image: vxros2build:1.0
-          options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk-vxworks7-up2:/wrsdk
+          image: vxbuild:1.0
+          options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:wrsdk
           run:  |
-             source /wrsdk/toolkit/wind_sdk_env.linux && make -C /work
+             cat /wrsdk/test
