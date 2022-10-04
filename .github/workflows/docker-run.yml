@@ -42,12 +42,15 @@ jobs:
           mkdir -p /tmp/wrsdk
           echo "This is a test" > /tmp/wrsdk/test
 
-#      - name: Setup environment
-#        run: |
-#          echo "UID=`id -u`" >> $GITHUB_ENV
-#          echo "GID=`id -g`" >> $GITHUB_ENV
+      - name: Setup environment
+        run: |
+          echo "uid=`id -u`" >> $GITHUB_ENV
+          echo "gid=`id -g`" >> $GITHUB_ENV
 
       - name: Docker run
+        env:
+          UID: ${{ env.uid }}
+          GID: ${{ env.gid }}
         uses: addnab/docker-run-action@v3
         with:
           image: vxbuild:1.0
