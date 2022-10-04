@@ -55,6 +55,6 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: vxbuild:1.0
-          options: -e UID=2000 -e GID=2000 -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
+          options: -v ${{ github.workspace }}:/work -v /tmp/wrsdk:/wrsdk
           run:  |
              cat /wrsdk/test && id && cat /etc/lsb-release
