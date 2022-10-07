@@ -1,5 +1,5 @@
 name: 'docker run test'
-# old repo, not supported and not working properly
+# old repo, not supported, works with some workarounds
 
 on: 
   workflow_dispatch:
