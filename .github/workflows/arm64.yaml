@@ -8,6 +8,9 @@ name: 'ARM 64-bit'
 on:
   workflow_dispatch:
 
+env:
+  ARCH: arm64
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -17,10 +20,22 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y qemu binfmt-support qemu-user-static
+          sudo dpkg --add-architecture ${ARCH}
+          sudo apt update
+          sudo apt install libc6:${ARCH}
 
-      - name: Check
+      - name: Check configuration
         run: |
           update-binfmts --display
+
+      - name: Test
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget http://deb.debian.org/debian/pool/main/h/hello/hello_2.10-2_arm64.deb
+          dpkg -x hello_2.10-2_arm64.deb /tmp/hello_arm64
+          /tmp/hello_arm64/usr/bin/hello
+          
 
 #      - name: Pull docker
 #        uses: addnab/docker-run-action@v3
