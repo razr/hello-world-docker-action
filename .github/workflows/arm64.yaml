@@ -21,8 +21,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y qemu binfmt-support qemu-user-static
           sudo dpkg --add-architecture ${ARCH}
+          sudo sed -i 's/deb h/deb [arch=amd64] h/g' /etc/apt/sources.list
+          sudo add-apt-repository -n -s "deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports/ $(lsb_release -s -c) main universe restricted"
+          sudo add-apt-repository -n -s "deb [arch=$ARCH] http://ports.ubuntu.com/ubuntu-ports $(lsb_release -s -c)-updates main universe restricted"
           sudo apt update
-          sudo apt install libc6:${ARCH}
 
       - name: Check configuration
         run: |
@@ -31,7 +33,7 @@ jobs:
       - name: Test
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget
+          sudo apt-get install -y libc6:${ARCH} wget
           wget http://deb.debian.org/debian/pool/main/h/hello/hello_2.10-2_arm64.deb
           dpkg -x hello_2.10-2_arm64.deb /tmp/hello_arm64
           /tmp/hello_arm64/usr/bin/hello
