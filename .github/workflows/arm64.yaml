@@ -42,7 +42,10 @@ jobs:
       - name: Pull docker
         uses: addnab/docker-run-action@v3
         with:
-          image: arm64v8/ubuntu
+          image: arm64v8/ubuntu:jammy
           options: --platform linux/arm64
           run:  |
             uname -a
+            cat /etc/lsb-release
+            id
+            
