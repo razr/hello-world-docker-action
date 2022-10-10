@@ -39,10 +39,10 @@ jobs:
           /tmp/hello_arm64/usr/bin/hello
           
 
-#      - name: Pull docker
-#        uses: addnab/docker-run-action@v3
-#        with:
-#          image: arm64v8/ubuntu
-#          options: --platform linux/arm64
-#          run:  |
-#            uname -a
+      - name: Pull docker
+        uses: addnab/docker-run-action@v3
+        with:
+          image: arm64v8/ubuntu
+          options: --platform linux/arm64
+          run:  |
+            uname -a
