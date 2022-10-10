@@ -1,0 +1,21 @@
+# This is a workflow for the ARM 64-bit docker.
+#
+# The workflow can be started 
+#  - manually
+
+name: 'ARM 64-bit'
+
+on:
+  workflow_dispatch:
+
+jobs:
+    runs-on: ubuntu-22.04
+    steps:
+
+      - name: Pull docker
+        uses: addnab/docker-run-action@v3
+        with:
+          image: arm64v8/ubuntu
+          options: --platform linux/arm64
+          run:  |
+            uname -a
