@@ -1,9 +1,9 @@
-# This is a workflow for the ARM 64-bit docker.
+# This is a workflow for the Cross ROS2 ARM 64-bit docker build
 #
 # The workflow can be started 
 #  - manually
 
-name: 'ARM 64-bit'
+name: 'Cross ROS2 build'
 
 on:
   workflow_dispatch:
