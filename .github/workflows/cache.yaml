@@ -1,0 +1,38 @@
+# This is a workflow for the cache example
+#
+# The workflow can be started 
+#  - manually
+
+name: 'Cache example'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-cache:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: 'Create cache'
+      run: |
+        mkdir -p /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
+        echo artifact > /home/runner/work/meta-ros/meta-ros/ros_common_artifacts/artifact
+
+    - name: Cache NPM dependencies
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
+        key: some-key
+
+  use-cache:
+    needs: create-cache
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Cache NPM dependencies
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
+        key: some-key
+
+      - name: 'Use cache'
+        run: |
+          cat /home/runner/work/meta-ros/meta-ros/ros_common_artifacts/artifact
