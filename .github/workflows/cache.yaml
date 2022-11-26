@@ -15,12 +15,12 @@ jobs:
     - name: 'Cache action'
       uses: actions/cache@v3
       with:
-        path: /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
+        path: /home/runner/work/ros_common_artifacts
         key: some-key
 
     - name: 'Create artifact'
       run: |
-        mkdir -p /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
+        mkdir -p /home/runner/work/ros_common_artifacts
         echo artifact > /home/runner/work/ros_common_artifacts/artifact
 
   use-cache:
@@ -30,7 +30,7 @@ jobs:
     - name: 'Cache action'
       uses: actions/cache@v3
       with:
-        path: /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
+        path: /home/runner/work/ros_common_artifacts
         key: some-key
 
     - name: 'Use artifact'
