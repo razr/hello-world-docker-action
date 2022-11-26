@@ -1,3 +1,4 @@
+name: 'Reusable workflow'
 on:
   workflow_dispatch:
   workflow_call:
