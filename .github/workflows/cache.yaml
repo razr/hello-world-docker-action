@@ -12,16 +12,16 @@ jobs:
   create-cache:
     runs-on: ubuntu-22.04
     steps:
-    - name: 'Create cache'
-      run: |
-        mkdir -p /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
-        echo artifact > /home/runner/work/meta-ros/meta-ros/ros_common_artifacts/artifact
-
     - name: 'Cache action'
       uses: actions/cache@v3
       with:
         path: /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
         key: some-key
+
+    - name: 'Create artifact'
+      run: |
+        mkdir -p /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
+        echo artifact > /home/runner/work/ros_common_artifacts/artifact
 
   use-cache:
     needs: create-cache
@@ -33,6 +33,6 @@ jobs:
         path: /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
         key: some-key
 
-    - name: 'Use cache'
+    - name: 'Use artifact'
       run: |
-        cat /home/runner/work/meta-ros/meta-ros/ros_common_artifacts/artifact
+        cat /home/runner/work/ros_common_artifacts/artifact
