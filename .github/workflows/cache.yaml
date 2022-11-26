@@ -17,7 +17,7 @@ jobs:
         mkdir -p /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
         echo artifact > /home/runner/work/meta-ros/meta-ros/ros_common_artifacts/artifact
 
-    - name: Cache NPM dependencies
+    - name: 'Cache action'
       uses: actions/cache@v3
       with:
         path: /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
@@ -27,12 +27,12 @@ jobs:
     needs: create-cache
     runs-on: ubuntu-22.04
     steps:
-    - name: Cache NPM dependencies
+    - name: 'Cache action'
       uses: actions/cache@v3
       with:
         path: /home/runner/work/meta-ros/meta-ros/ros_common_artifacts
         key: some-key
 
-      - name: 'Use cache'
-        run: |
-          cat /home/runner/work/meta-ros/meta-ros/ros_common_artifacts/artifact
+    - name: 'Use cache'
+      run: |
+        cat /home/runner/work/meta-ros/meta-ros/ros_common_artifacts/artifact
