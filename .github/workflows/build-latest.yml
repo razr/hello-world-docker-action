@@ -5,14 +5,17 @@ on:
       kernel_version:
         description: 'Raspi kernel version, 5.4.0|5.15.0'
         required: false
+        default: '5.15.0'
         type: string
       ubuntu_version:
         description: 'Ubuntu version, focal|jammy'
         required: false
+        default: 'jammy'
         type: string
       lttng_version:
         description: 'LTTNG version, 2.13'
         required: false
+        default: '2.13'
         type: string
 
 jobs:
