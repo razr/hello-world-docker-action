@@ -33,9 +33,9 @@ jobs:
       - name: Setup environment
         run: |
           echo "sdk=`jq -r '[.vxros2build[] | select(.ros_distro == \"${{ matrix.ros_distro }}\") | {url} | .sdk][0]' ./.github/workflows/${{ env.JSON_FILE }}`" >> $GITHUB_ENV
-          echo "url=`jq -r '[.sdks[] | select(.sdk == \"${{ env.sdk }}\") | {url} | .url][0]' ./.github/workflows/${{ env.JSON_FILE }}`" >> $GITHUB_ENV
-          echo "script=`jq -r '[.sdks[] | select(.sdk == \"${{ env.sdk }}\") | {script} | .script][0]' ./.github/workflows/${{ env.JSON_FILE }}`" >> $GITHUB_ENV
-          echo "image=`jq -r '[.sdks[] | select(.sdk == \"${{ env.sdk }}\") | {image} | .image][0]' ./.github/workflows/${{ env.JSON_FILE }}`" >> $GITHUB_ENV
+          echo "url=`jq -r '[.sdks[] | select(.name == \"${{ env.sdk }}\") | {url} | .url][0]' ./.github/workflows/sdks.json`" >> $GITHUB_ENV
+          echo "script=`jq -r '[.sdks[] | select(.name == \"${{ env.sdk }}\") | {script} | .script][0]' ./.github/workflows/sdks.json`" >> $GITHUB_ENV
+          echo "image=`jq -r '[.sdks[] | select(.name == \"${{ env.sdk }}\") | {image} | .image][0]' ./.github/workflows/sdks.json`" >> $GITHUB_ENV
           echo "ros_distro=`echo ${{ matrix.ros_distro }}`" >> $GITHUB_ENV
 
       - name: Download the ${{ matrix.sdk }} SDK
