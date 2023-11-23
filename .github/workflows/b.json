@@ -1,0 +1,22 @@
+{
+  "vxros2build": [
+    {
+      "ros_distro": "humble",
+      "url": "https://d13321s3lxgewa.cloudfront.net/wrsdk-vxworks7-raspberrypi4b-1.5.1.tar.bz2",
+      "script": "./sdkenv.sh",
+      "image": "./vxsdk/bsps/*/vxWorks"
+    },
+    {
+      "ros_distro": "iron",
+      "url": "https://d13321s3lxgewa.cloudfront.net/wrsdk-vxworks7-raspberrypi4b-1.5.1.tar.bz2",
+      "script": "./sdkenv.sh",
+      "image": "./vxsdk/bsps/*/vxWorks"
+    },
+    {
+      "ros_distro": "rolling",
+      "url": "https://d13321s3lxgewa.cloudfront.net/wrsdk-vxworks7-raspberrypi4b-1.5.1.tar.bz2",
+      "script": "./sdkenv.sh",
+      "image": "./vxsdk/bsps/*/vxWorks"
+    }
+  ]
+}
