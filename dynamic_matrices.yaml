@@ -1,0 +1,45 @@
+name: 'dynamic matrices'
+
+on:
+  workflow_dispatch:
+    inputs:
+      json_file_name:
+        description: 'Name of the JSON file'
+        required: true
+        default: 'jsonfile-param-a.json'
+      ros_distros:
+        description: 'List of ROS distributions'
+        required: true
+        default: 'humble,iron,rolling' # Default list of ROS distributions
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      jobs: ${{ steps.create_jobs.outputs.jobs }}
+    steps:
+      - name: Create jobs
+        id: create_jobs
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const distros = '${{ github.event.inputs.ros_distros }}'.split(',');
+            const jobs = {};
+            for (const distro of distros) {
+              jobs[`setup-${distro}`] = { 'runs-on': 'ubuntu-22.04', 'steps': [
+                { 'name': 'Checks-out the repository', 'uses': 'actions/checkout@v2' },
+                { 'name': `Setup environment - ${distro}`, 'run': `echo "Chosen JSON file: ${{ github.event.inputs.json_file_name }}" && echo "Chosen ROS distro: ${distro}"` }
+                // Add more steps as needed for each distro
+              ]};
+            }
+            return { jobs: jobs };
+
+  dynamically_created_jobs:
+    needs: setup
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        job: ${{fromJson(needs.setup.outputs.jobs)}}
+    steps:
+      - name: Run dynamically created jobs
+        run: echo "Running job ${{ matrix.job }}"
