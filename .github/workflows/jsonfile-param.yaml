@@ -21,7 +21,14 @@ jobs:
   build:
     strategy:
       matrix:
-        ros_distro: ${{ split(github.event.inputs.ros_distros, ',') }}
+        ros_distro:
+          # Dynamically setting values for ros_distro based on input parameter
+          include:
+            - ros_distro: humble
+            - ros_distro: iron
+            - ros_distro: rolling
+          # Using input parameter to dynamically generate additional matrix values
+            - ${{ matrix_generate(github.event.inputs.ros_distros) }}
 
     runs-on: ubuntu-22.04
     env:
