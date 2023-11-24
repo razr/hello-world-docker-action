@@ -32,7 +32,7 @@ jobs:
 
       - name: Setup environment
         run: |
-          sdk=`jq -r '[.vxros2build[] | select(.ros_distro == \"${{ matrix.ros_distro }}\") | {sdk} | .sdk][0]' ./.github/workflows/${{ env.JSON_FILE }}`
+          sdk=`jq -r '[.vxros2build[] | select(.ros_distro == \"${{ matrix.ros_distro }}\") | .sdk' ./.github/workflows/${{ env.JSON_FILE }}`
           echo "sdk=$sdk"
           echo "sdk=$sdk" >> $GITHUB_ENV
           echo "url=`jq -r '[.sdks[] | select(.name == \"$sdk\") | {url} | .url][0]' ./.github/workflows/sdks.json`" >> $GITHUB_ENV
