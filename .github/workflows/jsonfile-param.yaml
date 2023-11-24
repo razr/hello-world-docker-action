@@ -33,6 +33,11 @@ jobs:
       - name: Fetch SDK name
         run: |
           sdk=$(jq -r --arg distro "${{ matrix.ros_distro }}" '.vxros2build[] | select(.ros_distro == $distro) | .sdk' .github/workflows/${{ github.event.inputs.json_file_name }})
+          if [ -z "$sdk" ]; then
+            echo "SDK not found for ${{ matrix.ros_distro }}. Stopping workflow."
+            echo "::error::SDK not found for ${{ matrix.ros_distro }}"
+            exit 1
+          fi
           echo "sdk=$sdk" >> $GITHUB_ENV
 
       - name: Fetch SDK details
