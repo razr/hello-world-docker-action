@@ -43,6 +43,11 @@ jobs:
       - name: Fetch SDK details
         run: |
           url=$(jq -r --arg sdk "$sdk" '.sdks[] | select(.name == $sdk) | .url' .github/workflows/sdks.json)
+          if [ -z "$url" ]; then
+            echo "URL not found for $sdk. Stopping workflow."
+            echo "::error::URL not found for $sdk"
+            exit 1
+          fi
           script=$(jq -r --arg sdk "$sdk" '.sdks[] | select(.name == $sdk) | .script' .github/workflows/sdks.json)
           image=$(jq -r --arg sdk "$sdk" '.sdks[] | select(.name == $sdk) | .image' .github/workflows/sdks.json)
           echo "url=$url" >> $GITHUB_ENV
