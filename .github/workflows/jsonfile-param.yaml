@@ -21,7 +21,7 @@ jobs:
   build:
     strategy:
       matrix:
-        ros_distro: ${{ split(github.event.inputs.ros_distros, ',') }}
+        ros_distro: ${{ format('{0}', github.event.inputs.ros_distros) }}
 
     runs-on: ubuntu-22.04
     env:
