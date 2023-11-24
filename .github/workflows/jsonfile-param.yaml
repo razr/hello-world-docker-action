@@ -13,11 +13,15 @@ on:
         description: 'Name of the JSON file'
         required: true
         default: 'jsonfile-param-a.json'
+      ros_distros:
+        description: 'List of ROS distributions'
+        required: true
+        default: 'humble,iron,rolling' # Default list of ROS distributions
 jobs:
   build:
     strategy:
       matrix:
-        ros_distro: [humble, iron, rolling]
+        ros_distro: ${{ split(github.event.inputs.ros_distros, ',') }}
 
     runs-on: ubuntu-22.04
     env:
