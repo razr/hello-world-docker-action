@@ -13,25 +13,11 @@ on:
         description: 'Name of the JSON file'
         required: true
         default: 'jsonfile-param-a.json'
-      ros_distros:
-        description: 'List of ROS distributions'
-        required: true
-        default: 'humble,iron,rolling' # Default list of ROS distributions
 jobs:
-  generate_matrix:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix_values: ${{ steps.set-matrix-values.outputs.matrix_values }}
-    steps:
-      - name: Set matrix values
-        id: set-matrix-values
-        run: echo "::set-output name=matrix_values::${{ toJson(split(github.event.inputs.ros_distros, ',')) }}"
-
   build:
-    needs: generate_matrix
     strategy:
       matrix:
-        ros_distro: ${{fromJson(needs.generate_matrix.outputs.matrix_values)}}
+        ros_distro: [humble, iron, rolling]
 
     runs-on: ubuntu-22.04
     env:
