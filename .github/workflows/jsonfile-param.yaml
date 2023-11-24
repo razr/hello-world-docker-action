@@ -28,6 +28,7 @@ jobs:
         run: echo "::set-output name=matrix_values::${{ toJson(split(github.event.inputs.ros_distros, ',')) }}"
 
   build:
+    needs: generate_matrix
     strategy:
       matrix:
         ros_distro: ${{fromJson(needs.generate_matrix.outputs.matrix_values)}}
