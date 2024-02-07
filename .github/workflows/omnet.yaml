@@ -31,7 +31,7 @@ jobs:
     - name: Build OMNeT++
       run: |
         cd omnetpp-${{ inputs.omnetpp_version }}
-        . ./setenv
+        bash ./setenv
         ./configure
         make
 
