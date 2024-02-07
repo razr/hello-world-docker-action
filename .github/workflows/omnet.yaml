@@ -23,12 +23,15 @@ jobs:
         apt-get update
         apt-get install -y build-essential clang bison flex perl python zlib1g-dev wget
 
-    - name: Build OMNeT++
+    - name: Get OMNeT++
       run: |
         wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${{ inputs.omnetpp_version }}/omnetpp-${{ inputs.omnetpp_version }}-src-linux.tgz
         tar -xvf omnetpp-${{ inputs.omnetpp_version }}-src-linux.tgz
+
+    - name: Build OMNeT++
+      run: |
         cd omnetpp-${{ inputs.omnetpp_version }}
-        ./setenv
+        source setenv
         ./configure
         make
 
