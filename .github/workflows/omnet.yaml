@@ -1,9 +1,7 @@
 name: Build and Package OMNeT++ (Debian)
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -11,6 +9,12 @@ jobs:
 
     container:
       image: debian:buster
+
+    inputs:
+      omnetpp_version:
+        description: 'OMNeT++ version to build'
+        required: false
+        default: '5.7.1'  # Default version if not provided
 
     steps:
     - name: Checkout code
@@ -23,9 +27,9 @@ jobs:
 
     - name: Build OMNeT++
       run: |
-        wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-5.7.1/omnetpp-5.7.1-src-linux.tgz
-        tar -xzf omnetpp-5.7.1-src-linux.tgz
-        cd omnetpp-5.7.1 && ./configure && make
+        wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${{ inputs.omnetpp_version }}/omnetpp-${{ inputs.omnetpp_version }}-src-linux.tgz
+        tar -xzf omnetpp-${{ inputs.omnetpp_version }}-src-linux.tgz
+        cd omnetpp-${{ inputs.omnetpp_version }} && source setenv && ./configure && make
 
     - name: Create Artifact
       run: |
