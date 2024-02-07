@@ -1,0 +1,39 @@
+name: Build and Package OMNeT++ (Debian)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: debian/contrib-buster64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        apt-get update
+        apt-get install -y build-essential clang bison flex perl python zlib1g-dev
+
+    - name: Build OMNeT++
+      run: |
+        wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-5.7.1/omnetpp-5.7.1-src-linux.tgz
+        tar -xzf omnetpp-5.7.1-src-linux.tgz
+        cd omnetpp-5.7.1 && ./configure && make
+
+    - name: Create Artifact
+      run: |
+        # Create a ZIP archive containing the built OMNeT++ files
+        zip -r omnetpp-artifact.zip omnetpp-5.7.1
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: omnetpp-artifact
+        path: omnetpp-artifact.zip
