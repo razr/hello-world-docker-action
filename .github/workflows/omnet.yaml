@@ -26,7 +26,7 @@ jobs:
     - name: Build OMNeT++
       run: |
         wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${{ inputs.omnetpp_version }}/omnetpp-${{ inputs.omnetpp_version }}-src-linux.tgz
-        tar -xzf omnetpp-${{ inputs.omnetpp_version }}-src-linux.tgz
+        tar -xvzf omnetpp-${{ inputs.omnetpp_version }}-src-linux.tgz
         cd omnetpp-${{ inputs.omnetpp_version }}
         source setenv
         ./configure
