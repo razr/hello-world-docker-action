@@ -34,10 +34,10 @@ jobs:
     - name: Create Artifact
       run: |
         # Create a ZIP archive containing the built OMNeT++ files
-        zip -r omnetpp-artifact.zip omnetpp-5.7.1
+        zip -r omnetpp-${{ inputs.omnetpp_version }}.zip omnetpp-${{ inputs.omnetpp_version }}
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: omnetpp-artifact
-        path: omnetpp-artifact.zip
+        name: omnetpp-${{ inputs.omnetpp_version }}
+        path: omnetpp-${{ inputs.omnetpp_version }}.zip
