@@ -1,4 +1,4 @@
-name: Build and Package OMNeT++ (Debian)
+name: Build and Package OMNeT++ ${{ inputs.omnetpp_version }}
 
 on:
   workflow_dispatch:
