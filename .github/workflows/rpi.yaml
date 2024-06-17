@@ -6,23 +6,23 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v2
     - uses: pguyot/arm-runner-action@v2
       with:
-        base_image: https://cdimage.ubuntu.com/releases/22.04.1/release/ubuntu-22.04.1-preinstalled-server-arm64+raspi.img.xz
+        base_image: https://cdimage.ubuntu.com/releases/24.04/release/ubuntu-24.04-preinstalled-server-arm64+raspi.img.xz
         commands: |
           cat /etc/os-release
           uname -a
 
-  build_ubuntu_22_04:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: pguyot/arm-runner-action@v2
-      with:
-        base_image: https://cdimage.ubuntu.com/releases/22.04.1/release/ubuntu-22.04.1-preinstalled-server-arm64+raspi.img.xz
-        commands: |
-          cat /etc/os-release
-          uname -a
+#  build_ubuntu_22_04:
+#    runs-on: ubuntu-latest
+#    steps:
+#    - uses: actions/checkout@v2
+#    - uses: pguyot/arm-runner-action@v2
+#      with:
+#        base_image: https://cdimage.ubuntu.com/releases/22.04.1/release/ubuntu-22.04.1-preinstalled-server-arm64+raspi.img.xz
+#        commands: |
+#          cat /etc/os-release
+#          uname -a
