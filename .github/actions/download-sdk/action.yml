@@ -19,7 +19,7 @@ inputs:
     required: false
     default: '24.03'
   directory:
-    description: 'Directory to download the SDK'
+    description: 'Directory to download and extract the SDK'
     required: false
     default: '/tmp'
 
@@ -28,7 +28,7 @@ runs:
   steps:
     - name: Checkout repository
       run: |
-        git clone ${{ env.GITHUB_SERVER_URL }}/${{ github.repository }} ${{ github.workspace }}
+        git clone ${{ env.GITHUB_SERVER_URL }}/${{ github.repository }} ${{ inputs.directory }}
       shell: bash
 
     - name: Set up Python
@@ -45,7 +45,7 @@ runs:
     - name: Calculate filename
       id: calculate-filename
       run: |
-        cd ${{ github.workspace }}
+        cd ${{ inputs.directory }}
         python .github/workflows/scripts/parse_wrsdks.py "${{ inputs.json_file }}" "${{ inputs.name }}" "${{ inputs.release }}" > filename.txt
         cat filename.txt
       shell: bash
@@ -58,4 +58,10 @@ runs:
     - name: Download SDK
       run: wget --no-check-certificate ${{ env.FILENAME }} -P ${{ inputs.directory }}
       shell: bash
+
+      - name: Extract the ${{ env.sdk }} SDK
+        run: |
+          mkdir -p ${{ inputs.directory }}/wrsdk
+          cd  ${{ inputs.directory }}/wrsdk
+          tar xvfj ${{ inputs.directory }}/${{ env.FILENAME }} --strip 1
 
