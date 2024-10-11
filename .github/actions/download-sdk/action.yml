@@ -27,13 +27,13 @@ runs:
   using: 'composite'
   steps:
     - name: Checkout repository
-#      run: |
-#        git clone ${{ env.GITHUB_SERVER_URL }}/${{ github.repository }} ${{ inputs.directory }}
-#        shell: bash
-      uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: ${{ inputs.directory }}
+      run: |
+        git clone https://github.com/razr/hello-world-docker-action.git ${{ inputs.directory }}
+        shell: bash
+#      uses: actions/checkout@v3
+#      with:
+#        token: ${{ secrets.GITHUB_TOKEN }}
+#        path: ${{ inputs.directory }}
 
     - name: Set up Python
       uses: actions/setup-python@v2
