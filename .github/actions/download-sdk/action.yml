@@ -41,7 +41,8 @@ runs:
       id: calculate-url
       run: |
         cd ${{ inputs.directory }}
-        $GITHUB_ACTION_PATH/../../workflows/scripts/parse_wrsdks.py ${{ inputs.json_file }} ${{ inputs.name }} ${{ inputs.release }} > sdk-url.txt
+        ls $GITHUB_ACTION_PATH/../../workflows/scripts/
+        python $GITHUB_ACTION_PATH/../../workflows/scripts/parse_wrsdks.py ${{ inputs.json_file }} ${{ inputs.name }} ${{ inputs.release }} > sdk-url.txt
         cat sdk-url.txt
         echo SDK_URL=$(cat sdk-url.txt) >> $GITHUB_ENV
         echo FILENAME=$(basename $(cat sdk-url.txt)) >> $GITHUB_ENV
