@@ -61,7 +61,7 @@ runs:
       run: wget --no-check-certificate ${{ env.SDK_URL }} -P ${{ inputs.directory }}
       shell: bash
 
-    - name: Extract SDK: ${{ env.FILENAME }}
+    - name: Extract SDK
       run: |
         mkdir -p ${{ inputs.directory }}/wrsdk
         cd  ${{ inputs.directory }}/wrsdk
