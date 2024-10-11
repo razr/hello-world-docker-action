@@ -20,6 +20,7 @@ name: Download SDK
 
 on:
   workflow_call:
+  workflow_dispatch:
     inputs:
       json_file:
         description: 'Path to the JSON file'
