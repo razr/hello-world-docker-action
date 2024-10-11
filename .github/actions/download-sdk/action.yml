@@ -29,11 +29,13 @@ runs:
     - name: Checkout repository
       run: |
         git clone ${{ env.GITHUB_SERVER_URL }}/${{ github.repository }} ${{ inputs.directory }} --branch ${GITHUB_REF#refs/heads/}
+        if [[ "${{ env.GITHUB_SERVER_URL }}" == "https://github.com" ]]; then
+          GIT_URL=https://github.com/${{ github.repository }}
+        else
+          GIT_URL=${{ github.repository }}
+        fi
+        git clone $GIT_URL ${{ inputs.directory }} --branch ${GITHUB_REF#refs/heads/}
       shell: bash
-#      uses: actions/checkout@v3
-#      with:
-#        ref: ${{ github.ref }}
-#        path: ${{ inputs.directory }}
 
     - name: Set up Python
       uses: actions/setup-python@v2
