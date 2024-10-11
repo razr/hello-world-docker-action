@@ -40,7 +40,7 @@ runs:
     - name: Calculate URL
       id: calculate-url
       run: |
-        cd $GITHUB_ACTION_PATH/../../
+        cd $GITHUB_ACTION_PATH/../../..
         python .github/workflows/scripts/parse_wrsdks.py ${{ inputs.json_file }} ${{ inputs.name }} ${{ inputs.release }} > ${{ inputs.directory }}/sdk-url.txt
         cd ${{ inputs.directory }}
         cat sdk-url.txt
