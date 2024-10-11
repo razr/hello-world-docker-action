@@ -29,7 +29,7 @@ runs:
     - name: Checkout repository
       run: |
         git clone https://github.com/razr/hello-world-docker-action.git ${{ inputs.directory }}
-        shell: bash
+      shell: bash
 #      uses: actions/checkout@v3
 #      with:
 #        token: ${{ secrets.GITHUB_TOKEN }}
