@@ -1,16 +1,11 @@
 # Download SDK using a callable workflow
 #
 name: Use Download SDK
-
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
   call-download-sdk:
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/download-sdk.yml
     with:
       json_file: .github/workflows/data/wrsdks.json
