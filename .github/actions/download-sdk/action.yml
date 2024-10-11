@@ -28,12 +28,7 @@ runs:
   steps:
     - name: Checkout repository
       run: |
-        if [[ ${{ github.repository }} =~ ^(http|https):// ]]; then
-          GIT_URL=${{ github.repository }}
-        else
-          GIT_URL=${{ env.GITHUB_SERVER_URL }}/${{ github.repository }}
-        fi
-        git clone $GIT_URL ${{ inputs.directory }} --branch ${GITHUB_REF#refs/heads/}
+        ls `pwd`
       shell: bash
 
     - name: Set up Python
