@@ -26,14 +26,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Checkout repository
-      run: |
-        echo "===================>GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
-        echo "===================>GITHUB_ACTION_PATH: $GITHUB_ACTION_PATH"
-        ls -al /github/workspace
-        ls -al /github/actions
-      shell: bash
-
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -49,10 +41,10 @@ runs:
       id: calculate-url
       run: |
         cd ${{ inputs.directory }}
-        python .github/workflows/scripts/parse_wrsdks.py "${{ inputs.json_file }}" "${{ inputs.name }}" "${{ inputs.release }}" > sdk-url.txt
+        $GITHUB_ACTION_PATH/../../workflows/scripts/parse_wrsdks.py ${{ inputs.json_file }} ${{ inputs.name }} ${{ inputs.release }} > sdk-url.txt
         cat sdk-url.txt
-        echo "SDK_URL=$(cat sdk-url.txt)" >> $GITHUB_ENV
-        echo "FILENAME=$(basename $(cat sdk-url.txt))" >> $GITHUB_ENV
+        echo SDK_URL=$(cat sdk-url.txt) >> $GITHUB_ENV
+        echo FILENAME=$(basename $(cat sdk-url.txt)) >> $GITHUB_ENV
       shell: bash
 
     - name: Download SDK
