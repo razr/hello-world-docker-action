@@ -40,6 +40,12 @@ runs:
         pip install jsonschema
       shell: bash
 
+    - name: Print working directory
+      run: |
+        cd ${{ github.workspace }}
+        pwd
+      shell: bash
+
     - name: Calculate filename
       id: calculate-filename
       run: |
