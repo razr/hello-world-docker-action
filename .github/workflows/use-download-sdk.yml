@@ -8,7 +8,7 @@ jobs:
   call-download-sdk:
     uses: ./.github/workflows/download-sdk.yml
     with:
-      json_file: .github/workflows/data/wrsdks.json
+      json_file: ./.github/workflows/data/wrsdks.json
       name: qemu
       release: 24.03
       directory: /tmp
