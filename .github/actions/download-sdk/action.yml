@@ -42,26 +42,29 @@ runs:
         pip install jsonschema
       shell: bash
 
-    - name: Calculate filename
-      id: calculate-filename
+    - name: Calculate URL
+      id: calculate-url
       run: |
         cd ${{ inputs.directory }}
-        python .github/workflows/scripts/parse_wrsdks.py "${{ inputs.json_file }}" "${{ inputs.name }}" "${{ inputs.release }}" > filename.txt
-        cat filename.txt
+        python .github/workflows/scripts/parse_wrsdks.py "${{ inputs.json_file }}" "${{ inputs.name }}" "${{ inputs.release }}" > sdk-url.txt
+        cat sdk-url.txt
       shell: bash
 
-    - name: Read filename
-      id: read-filename
-      run: echo "FILENAME=$(cat filename.txt)" >> $GITHUB_ENV
+    - name: Store URL
+      id: sdk-url
+      run: |
+        echo "SDK_URL=$(cat sdk-url.txt)" >> $GITHUB_ENV
+        echo "FILENAME=$(basename $(cat sdk-url.txt))" >> $GITHUB_ENV
       shell: bash
 
     - name: Download SDK
-      run: wget --no-check-certificate ${{ env.FILENAME }} -P ${{ inputs.directory }}
+      run: wget --no-check-certificate ${{ env.SDK_URL }} -P ${{ inputs.directory }}
       shell: bash
 
-      - name: Extract the ${{ env.sdk }} SDK
-        run: |
-          mkdir -p ${{ inputs.directory }}/wrsdk
-          cd  ${{ inputs.directory }}/wrsdk
-          tar xvfj ${{ inputs.directory }}/${{ env.FILENAME }} --strip 1
+    - name: Extract SDK: ${{ env.FILENAME }}
+      run: |
+        mkdir -p ${{ inputs.directory }}/wrsdk
+        cd  ${{ inputs.directory }}/wrsdk
+        tar xvfj ${{ inputs.directory }}/${{ env.FILENAME }} --strip 1
+      shell: bash
 
