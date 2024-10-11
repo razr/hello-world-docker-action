@@ -28,6 +28,7 @@ runs:
   steps:
     - name: Checkout repository
       run: |
+        echo "===========>${{ env.GITHUB_SERVER_URL }}"
         if [[ "${{ env.GITHUB_SERVER_URL }}" == "https://github.com" ]]; then
           GIT_URL=https://github.com/${{ github.repository }}
         else
