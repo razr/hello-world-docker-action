@@ -27,7 +27,8 @@
               "properties": {
                 "name": {
                   "type": "string",
-                  "enum": ["qemu", "raspberrypi4b"]
+                  "enum": ["qemu", "raspberrypi4b"],
+                  "default": "qemu"
                 },
                 "sdk_version": {
                   "type": "string",
