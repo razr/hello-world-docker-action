@@ -27,9 +27,9 @@ runs:
   using: 'composite'
   steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
-      with:
-        path: .
+      run: |
+        git clone https://github.com/razr/hello-world-docker-action "${{ github.workspace }}"
+      shell: bash
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -42,17 +42,10 @@ runs:
         pip install jsonschema
       shell: bash
 
-    - name: Print working directory
-      run: |
-        echo "Current directory:"
-        pwd
-        ls -R
-      shell: bash
-
     - name: Calculate filename
       id: calculate-filename
       run: |
-        cd ${{ github.workspace }}
+        cd "${{ github.workspace }}"
         python .github/workflows/scripts/parse_wrsdks.py "${{ inputs.json_file }}" "${{ inputs.name }}" "${{ inputs.release }}" > filename.txt
         cat filename.txt
       shell: bash
