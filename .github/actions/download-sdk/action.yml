@@ -28,7 +28,10 @@ runs:
   steps:
     - name: Checkout repository
       run: |
-        ls `pwd`
+        echo "===================>GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+        echo "===================>GITHUB_ACTION_PATH: $GITHUB_ACTION_PATH"
+        ls -al /github/workspace
+        ls -al /github/actions
       shell: bash
 
     - name: Set up Python
