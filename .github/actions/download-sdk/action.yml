@@ -45,11 +45,14 @@ runs:
       run: |
         python .github/workflows/scripts/parse_wrsdks.py "${{ inputs.json_file }}" "${{ inputs.name }}" "${{ inputs.release }}" > filename.txt
         cat filename.txt
+      shell: bash
 
     - name: Read filename
       id: read-filename
       run: echo "FILENAME=$(cat filename.txt)" >> $GITHUB_ENV
+      shell: bash
 
     - name: Download SDK
       run: wget --no-check-certificate ${{ env.FILENAME }} -P ${{ inputs.directory }}
+      shell: bash
 
