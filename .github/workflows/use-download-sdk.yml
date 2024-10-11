@@ -1,14 +1,20 @@
 # Download SDK using a callable workflow
 #
-name: Use Download SDK
+name: 'Use Download WRLabs SDK'
+
 on:
   workflow_dispatch:
 
 jobs:
   call-download-sdk:
-    uses: ./.github/workflows/download-sdk.yml
-    with:
-      json_file: ./.github/workflows/data/wrsdks.json
-      name: qemu
-      release: 24.03
-      directory: /tmp
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Use Download SDK action
+        uses: ./ .github/actions/download-sdk
+        with:
+          json_file: .github/workflows/data/wrsdks.json
+          name: qemu
+          release: 24.03
+          directory: /tmp
+
