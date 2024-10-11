@@ -5,7 +5,7 @@
 #  "ref": "refs/heads/main",
 #  "inputs": {
 #    "json_file": ".github/workflows/data/wrsdks.json",
-#    "name": "qemu",
+#    "name": "raspberrypi4b",
 #    "release": "24.03",
 #     "directory": "/tmp"
 #   }
@@ -13,13 +13,25 @@
 #
 
 name: 'Use Download WRLabs SDK'
+run-name: Build ${{ inputs.vxworks_release }} ${{ inputs.sdk_name }}
 
 on:
   workflow_dispatch:
-
+    inputs:
+      sdk_name:
+        description: 'SDK Name'
+        required: false
+        default: 'qemu'
+      vxworks_release:
+        description: 'VxWorks Release'
+        required: false
+        default: '24.03'
 jobs:
   call-download-sdk:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    env:
+      sdk_name: ${{ github.event.inputs.sdk_name }}
+      vxworks_release: ${{ github.event.inputs.vxworks_release }}
 
     steps:
       - name: Checks-out a branch
@@ -30,8 +42,8 @@ jobs:
         uses: razr/hello-world-docker-action/.github/actions/download-sdk@main
         with:
           json_file: .github/workflows/data/wrsdks.json
-          name: qemu
-          release: 24.03
+          name: $sdk_name
+          release: $vxworks_release
           directory: /tmp
 
 
