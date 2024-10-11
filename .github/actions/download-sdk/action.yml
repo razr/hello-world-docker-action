@@ -42,6 +42,7 @@ runs:
 
     - name: Print working directory
       run: pwd
+      shell: bash
 
     - name: Calculate filename
       id: calculate-filename
