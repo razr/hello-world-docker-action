@@ -28,7 +28,6 @@ runs:
   steps:
     - name: Checkout repository
       run: |
-        git clone ${{ env.GITHUB_SERVER_URL }}/${{ github.repository }} ${{ inputs.directory }} --branch ${GITHUB_REF#refs/heads/}
         if [[ "${{ env.GITHUB_SERVER_URL }}" == "https://github.com" ]]; then
           GIT_URL=https://github.com/${{ github.repository }}
         else
