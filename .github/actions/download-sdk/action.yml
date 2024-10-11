@@ -27,9 +27,13 @@ runs:
   using: 'composite'
   steps:
     - name: Checkout repository
-      run: |
-        git clone ${{ env.GITHUB_SERVER_URL }}/${{ github.repository }} ${{ inputs.directory }}
-      shell: bash
+#      run: |
+#        git clone ${{ env.GITHUB_SERVER_URL }}/${{ github.repository }} ${{ inputs.directory }}
+#        shell: bash
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        path: ${{ inputs.directory }}
 
     - name: Set up Python
       uses: actions/setup-python@v2
