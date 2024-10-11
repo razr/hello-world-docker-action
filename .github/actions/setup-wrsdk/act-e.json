@@ -1,5 +1,4 @@
 {
-  "ref": "refs/heads/main",
   "inputs": {
     "sdk_name": "qemu",
     "vxworks_release": "24.03"

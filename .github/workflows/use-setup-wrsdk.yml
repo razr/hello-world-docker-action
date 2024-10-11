@@ -2,17 +2,14 @@
 # $ act workflow_dispatch -v -W .github/workflows/use-download-sdk.yml -P ubuntu-22.04=ghcr.io/catthehacker/ubuntu:act-22.04 -e act-e.json
 # $ cat act-e.json
 # {
-#  "ref": "refs/heads/main",
 #  "inputs": {
-#    "json_file": "wrsdks.json",
-#    "name": "raspberrypi4b",
-#    "release": "24.03",
-#    "directory": "/tmp"
+#    "sdk_name": "raspberrypi4b",
+#    "vxworks_release": "24.03"
 #   }
 # }
 #
 
-name: 'Setup WRLabs SDK'
+name: 'Use a setup WRLabs SDK'
 run-name: Setup ${{ inputs.vxworks_release }} ${{ inputs.sdk_name }} SDK
 
 on:
