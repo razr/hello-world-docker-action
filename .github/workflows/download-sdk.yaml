@@ -19,20 +19,28 @@
 name: Download SDK
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       json_file:
         description: 'Path to the JSON file'
-        required: true
+        required: false
         default: '.github/workflows/data/wrsdks.json'
+        type: string
       name:
         description: 'Name of the SDK'
-        required: true
+        required: false
         default: 'qemu'
+        type: string
       release:
         description: 'Release version'
-        required: true
+        required: false
         default: '24.03'
+        type: string
+      directory:
+        description: 'Directory to download the SDK'
+        required: false
+        default: '/tmp'
+        type: string
 
 jobs:
   download-sdk:
@@ -55,19 +63,13 @@ jobs:
       - name: Calculate filename
         id: calculate-filename
         run: |
-          python .github/workflows/scripts/parse_wrsdks.py "${{ github.event.inputs.json_file }}" "${{ github.event.inputs.name }}" "${{ github.event.inputs.release }}" > filename.txt
+          python .github/workflows/scripts/parse_wrsdks.py "${{ inputs.json_file }}" "${{ inputs.name }}" "${{ inputs.release }}" > filename.txt
           cat filename.txt
 
       - name: Read filename
         id: read-filename
         run: echo "FILENAME=$(cat filename.txt)" >> $GITHUB_ENV
 
-#      - name: Download SDK
-#        uses: carlosperate/download-file-action@v1
-#        with:
-#          file-url: ${{ env.FILENAME }}
-#          location: '/tmp'
-
       - name: Download SDK
-        run: wget --no-check-certificate ${{ env.FILENAME }} -P /tmp
+        run: wget --no-check-certificate ${{ env.FILENAME }} -P ${{ inputs.directory }}
 
