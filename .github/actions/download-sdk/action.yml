@@ -28,7 +28,7 @@ runs:
   steps:
     - name: Checkout repository
       run: |
-        git clone https://github.com/razr/hello-world-docker-action ${{ github.workspace }}
+        git clone ${{ env.GITHUB_SERVER_URL }}/${{ github.repository }} ${{ github.workspace }}
       shell: bash
 
     - name: Set up Python
