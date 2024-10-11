@@ -40,15 +40,11 @@ runs:
         pip install jsonschema
       shell: bash
 
-    - name: Print working directory
-      run: pwd
-      shell: bash
-
     - name: Calculate filename
       id: calculate-filename
-      working-directory: .github/workflows
       run: |
-        python scripts/parse_wrsdks.py "${{ inputs.json_file }}" "${{ inputs.name }}" "${{ inputs.release }}" > filename.txt
+        cd ${{ github.workspace }}
+        python .github/workflows/scripts/parse_wrsdks.py "${{ inputs.json_file }}" "${{ inputs.name }}" "${{ inputs.release }}" > filename.txt
         cat filename.txt
       shell: bash
 
