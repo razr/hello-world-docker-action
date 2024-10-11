@@ -48,11 +48,6 @@ runs:
         cd ${{ inputs.directory }}
         python .github/workflows/scripts/parse_wrsdks.py "${{ inputs.json_file }}" "${{ inputs.name }}" "${{ inputs.release }}" > sdk-url.txt
         cat sdk-url.txt
-      shell: bash
-
-    - name: Store URL
-      id: sdk-url
-      run: |
         echo "SDK_URL=$(cat sdk-url.txt)" >> $GITHUB_ENV
         echo "FILENAME=$(basename $(cat sdk-url.txt))" >> $GITHUB_ENV
       shell: bash
