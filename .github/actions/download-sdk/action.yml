@@ -42,8 +42,9 @@ runs:
 
     - name: Print working directory
       run: |
-        cd ${{ github.workspace }}
+        echo "Current directory:"
         pwd
+        ls -R
       shell: bash
 
     - name: Calculate filename
