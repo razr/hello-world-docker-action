@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Use Download SDK action
-        uses: ./ .github/actions/download-sdk
+        uses: razr/hello-world-docker-action/.github/actions/download-sdk@main
         with:
           json_file: .github/workflows/data/wrsdks.json
           name: qemu
