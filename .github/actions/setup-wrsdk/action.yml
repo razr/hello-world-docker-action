@@ -2,20 +2,20 @@
 # It downloads the WRLabs SDK and unpack it
 #
 
-name: 'Download SDK'
-description: 'Downloads the SDK based on the provided JSON file, SDK name, and release version.'
+name: 'Setup WRSDK'
+description: 'Download and setup the VxWorks SDK'
 
 inputs:
   json_file:
-    description: 'Path to the JSON file'
+    description: 'JSON file that provides a description of all supported SDKs'
     required: false
-    default: '.github/workflows/data/wrsdks.json'
+    default: 'wrsdks.json'
   name:
     description: 'Name of the SDK'
     required: false
     default: 'qemu'
   release:
-    description: 'Release version'
+    description: 'VxWorks Release'
     required: false
     default: '24.03'
   directory:
@@ -37,11 +37,11 @@ runs:
         pip install jsonschema
       shell: bash
 
-    - name: Calculate URL
+    - name: Calculate SDK URL
       id: calculate-url
       run: |
-        cd $GITHUB_ACTION_PATH/../../..
-        python .github/workflows/scripts/parse_wrsdks.py ${{ inputs.json_file }} ${{ inputs.name }} ${{ inputs.release }} > ${{ inputs.directory }}/sdk-url.txt
+        cd $GITHUB_ACTION_PATH
+        python ./parse_wrsdks.py ${{ inputs.json_file }} ${{ inputs.name }} ${{ inputs.release }} > ${{ inputs.directory }}/sdk-url.txt
         cd ${{ inputs.directory }}
         cat sdk-url.txt
         echo SDK_URL=$(cat sdk-url.txt) >> $GITHUB_ENV

@@ -1,19 +1,19 @@
 # Download SDK using a callable workflow
-# $ act workflow_dispatch -v -W .github/workflows/use-download-sdk.yml -P ubuntu-22.04=ghcr.io/catthehacker/ubuntu:act-22.04
-# $ cat e.json
+# $ act workflow_dispatch -v -W .github/workflows/use-download-sdk.yml -P ubuntu-22.04=ghcr.io/catthehacker/ubuntu:act-22.04 -e act-e.json
+# $ cat act-e.json
 # {
 #  "ref": "refs/heads/main",
 #  "inputs": {
-#    "json_file": ".github/workflows/data/wrsdks.json",
+#    "json_file": "wrsdks.json",
 #    "name": "raspberrypi4b",
 #    "release": "24.03",
-#     "directory": "/tmp"
+#    "directory": "/tmp"
 #   }
 # }
 #
 
-name: 'Use Download WRLabs SDK'
-run-name: Build ${{ inputs.vxworks_release }} ${{ inputs.sdk_name }}
+name: 'Setup WRLabs SDK'
+run-name: Setup ${{ inputs.vxworks_release }} ${{ inputs.sdk_name }} SDK
 
 on:
   workflow_dispatch:
@@ -39,9 +39,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Use Download SDK action
-        uses: razr/hello-world-docker-action/.github/actions/download-sdk@main
+        uses: razr/hello-world-docker-action/.github/actions/setup-wrsdk@main
         with:
-          json_file: .github/workflows/data/wrsdks.json
+          json_file: wrsdks.json
           name: $sdk_name
           release: $vxworks_release
           directory: /tmp

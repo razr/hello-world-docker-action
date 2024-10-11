@@ -63,7 +63,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    schema_path = os.path.join(base_dir, "../schemas/wrsdk-schema.json")
+    schema_path = os.path.join(base_dir, "schemas/wrsdk-schema.json")
     
     uri = main(schema_path, args.data_path, args.name, args.release)
     print(uri)
