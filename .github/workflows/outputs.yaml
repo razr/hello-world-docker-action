@@ -1,0 +1,28 @@
+name: 'Outputs'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    outputs:
+      sdk: ${{ steps.set_outputs.outputs.sdk }}
+      ros_distro: ${{ steps.set_outputs.outputs.ros_distro }}
+    env:
+      sdk: ${{ github.event.inputs.sdk || 'qemu' }}
+      ros_distro: ${{ github.event.inputs.ros_distro || 'humble' }}
+    steps:
+      - name: Set outputs for sdk and ros_distro
+        id: set_outputs
+        run: |
+          echo "sdk=${{ env.sdk }}" >> $GITHUB_OUTPUT
+          echo "ros_distro=${{ env.ros_distro }}" >> $GITHUB_OUTPUT
+  test:
+    runs-on: ubuntu-22.04
+    needs: build
+    steps:
+      - name: Use SDK and ROS Distro from build job
+        run: |
+          echo "SDK: ${{ needs.build.outputs.sdk }}"
+          echo "ROS Distro: ${{ needs.build.outputs.ros_distro }}"
