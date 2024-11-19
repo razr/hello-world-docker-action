@@ -13,11 +13,23 @@ jobs:
       sdk: ${{ github.event.inputs.sdk || 'qemu' }}
       ros_distro: ${{ github.event.inputs.ros_distro || 'humble' }}
     steps:
+      - name: Touch
+        run: |
+          echo "test=test" >> ${{ github.workspace }}/test
+
+      - name: Upload VxWorks and the HDD image
+        uses: actions/upload-artifact@v3
+        with:
+          name: HDD image ${{ env.sdk }} ${{ env.ros_distro }}
+          path: |
+            ${{ github.workspace }}/test
+
       - name: Set outputs for sdk and ros_distro
         id: set_outputs
         run: |
           echo "sdk=${{ env.sdk }}" >> $GITHUB_OUTPUT
           echo "ros_distro=${{ env.ros_distro }}" >> $GITHUB_OUTPUT
+
   test:
     runs-on: ubuntu-22.04
     needs: build
@@ -26,3 +38,13 @@ jobs:
         run: |
           echo "SDK: ${{ needs.build.outputs.sdk }}"
           echo "ROS Distro: ${{ needs.build.outputs.ros_distro }}"
+
+      - name: Download HDD image and VxWorks artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: HDD image ${{ needs.build.outputs.sdk }} ${{ needs.build.outputs.ros_distro }}
+
+      - name: Set outputs for sdk and ros_distro
+        id: set_outputs
+        run: |
+          cat ${{ github.workspace }}/test
