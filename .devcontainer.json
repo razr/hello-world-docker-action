@@ -1,0 +1,4 @@
+{
+  "name": "hello-world-docker-action",
+  "forwardPorts": [2222]
+}
