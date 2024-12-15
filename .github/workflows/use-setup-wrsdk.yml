@@ -1,9 +1,13 @@
 # Download SDK using a callable workflow
-# $ act workflow_dispatch -v -W .github/workflows/use-download-sdk.yml -P ubuntu-22.04=ghcr.io/catthehacker/ubuntu:act-22.04 -e act-e.json
-# $ cat act-e.json
+#
+# $ act workflow_dispatch -v -W .github/workflows/use-setup-wrsdk.yml \
+#   -P ubuntu-22.04=ghcr.io/catthehacker/ubuntu:act-22.04 \
+#   -e .github/actions/setup-wrsdk/act-e.json
+#
+# $ cat .github/actions/setup-wrsdk/act-e.json
 # {
 #  "inputs": {
-#    "sdk_name": "raspberrypi4b",
+#    "sdk_name": "qemu",
 #    "vxworks_release": "24.03"
 #   }
 # }
@@ -38,9 +42,9 @@ jobs:
       - name: Use Download SDK action
         uses: razr/hello-world-docker-action/.github/actions/setup-wrsdk@main
         with:
-          json_file: wrsdks.json
-          name: $sdk_name
-          release: $vxworks_release
+          sdks_list: wrsdks.json
+          sdk: $sdk_name
+          vxworks: $vxworks_release
           directory: /tmp
 
 
