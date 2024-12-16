@@ -27,24 +27,44 @@ on:
         description: 'VxWorks Release'
         required: false
         default: '24.03'
+      repository_url:
+        description: 'Repository to checkout'
+        required: false
+        default: 'https://github.com/leethomason/tinyxml2'
+      repository_branch:
+        description: 'Branch to checkout'
+        required: false
+        default: 'master'
+
 jobs:
   call-download-sdk:
     runs-on: ubuntu-22.04
     env:
       sdk_name: ${{ github.event.inputs.sdk_name }}
       vxworks_release: ${{ github.event.inputs.vxworks_release }}
+      working_dir: /tmp
 
     steps:
       - name: Checks-out a branch
         ref: ${{ github.ref }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use Download SDK action
-        uses: razr/hello-world-docker-action/.github/actions/setup-wrsdk@main
+        uses: ./.github/actions/setup-wrsdk
         with:
           sdks_list: wrsdks.json
           sdk: $sdk_name
           vxworks: $vxworks_release
-          directory: /tmp
+          directory: $working_dir
 
+      - name: Checkout input repository
+        run: |
+          mkdir $working_dir/repo && cd $working_dir/repo
+          git clone ${{ github.event.inputs.repository_url }}
 
+      - name: Build package
+        run: |
+          cd $working_dir/repo/*
+          mkdir vxworks_build && cd vxworks_build
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=$WIND_CC_SYSROOT/mk/toolchain.cmake
+          make -j 8
