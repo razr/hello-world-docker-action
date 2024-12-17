@@ -1,8 +1,9 @@
 # Download SDK using a callable workflow
 #
 # $ act workflow_dispatch -v -W .github/workflows/use-setup-wrsdk.yml \
-#   -P ubuntu-22.04=ghcr.io/catthehacker/ubuntu:act-22.04 \
-#   -e .github/actions/setup-wrsdk/act-e.json
+#   -P ubuntu-22.04=catthehacker/ubuntu:act-22.04 \
+#   -e .github/actions/setup-wrsdk/act-e.json \
+#   --container-options "-v $HOME/Downloads/wrsdk-vxworks7-qemu:/tmp/wrsdk"
 #
 # $ cat .github/actions/setup-wrsdk/act-e.json
 # {
@@ -47,8 +48,8 @@ jobs:
     steps:
       - name: Checks-out a branch
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
+#        with:
+#          ref: ${{ github.ref }}
 
       - name: Use Setup SDK action
         uses: ./.github/actions/setup-wrsdk

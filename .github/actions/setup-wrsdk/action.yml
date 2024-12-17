@@ -52,14 +52,23 @@ runs:
       shell: bash
 
     - name: Download SDK
-      run: wget --no-check-certificate ${{ env.SDK_URL }} -P ${{ inputs.directory }}
+      run: |
+        if [ ! -f "${{ inputs.directory }}/wrsdk/sdkenv.sh" ]; then
+          wget --no-check-certificate ${{ env.SDK_URL }} -P ${{ inputs.directory }}
+        else
+          echo "SDK already downloaded."
+        fi
       shell: bash
 
     - name: Extract SDK
       run: |
-        mkdir -p ${{ inputs.directory }}/wrsdk
-        cd  ${{ inputs.directory }}/wrsdk
-        tar xvfj ${{ inputs.directory }}/${{ env.FILENAME }} --strip 1
+        if [ ! -f "${{ inputs.directory }}/wrsdk/sdkenv.sh" ]; then
+          mkdir -p ${{ inputs.directory }}/wrsdk
+          cd  ${{ inputs.directory }}/wrsdk
+          tar xvfj ${{ inputs.directory }}/${{ env.FILENAME }} --strip 1
+        else
+          echo "SDK already extracted."
+        fi
       shell: bash
 
     - name: Source SDK environment
