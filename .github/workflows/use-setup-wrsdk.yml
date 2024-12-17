@@ -46,8 +46,9 @@ jobs:
 
     steps:
       - name: Checks-out a branch
-        ref: ${{ github.ref }}
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       - name: Use Setup SDK action
         uses: ./.github/actions/setup-wrsdk
