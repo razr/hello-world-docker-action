@@ -49,7 +49,7 @@ jobs:
         ref: ${{ github.ref }}
         uses: actions/checkout@v4
 
-      - name: Use Download SDK action
+      - name: Use Setup SDK action
         uses: ./.github/actions/setup-wrsdk
         with:
           sdks_list: wrsdks.json
@@ -57,14 +57,42 @@ jobs:
           vxworks: $vxworks_release
           directory: $working_dir
 
-      - name: Checkout input repository
+      - name: Setup package
         run: |
-          mkdir $working_dir/repo && cd $working_dir/repo
-          git clone ${{ github.event.inputs.repository_url }}
+          build_dir=$working_dir/build
+          mkdir -p $build_dir
+          pkg_name=$(echo $repository_url | rev | cut -d '/' -f 1 | rev)
+          pkg_build_dir=build
+          pkg_src_dir=src
+          pkg_log_dir=log
+          mkdir -p $build_dir/$pkg_name/$pkg_build_dir
+          mkdir -p $build_dir/$pkg_name/$pkg_log_dir
 
-      - name: Build package
+          # Save variables to GITHUB_ENV
+          echo "BUILD_DIR=$build_dir" >> $GITHUB_ENV
+          echo "PKG_NAME=$pkg_name" >> $GITHUB_ENV
+          echo "PKG_BUILD_DIR=$pkg_build_dir" >> $GITHUB_ENV
+          echo "PKG_SRC_DIR=$pkg_src_dir" >> $GITHUB_ENV
+          echo "PKG_LOG_DIR=$pkg_log_dir" >> $GITHUB_ENV
+
+      - name: Unpack package
+        id: unpack
         run: |
-          cd $working_dir/repo/*
-          mkdir vxworks_build && cd vxworks_build
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=$WIND_CC_SYSROOT/mk/toolchain.cmake
-          make -j 8
+          cd $BUILD_DIR/$PKG_NAME
+          git clone ${{ github.event.inputs.repository_url }} $PKG_SRC_DIR
+          cd $PKG_SRC_DIR
+          git checkout $repository_branch
+
+      - name: Configure package
+        id: configure
+        run: |
+          cd $BUILD_DIR/$PKG_NAME/$PKG_BUILD_DIR
+          cmake ../$PKG_SRC_DIR -DCMAKE_TOOLCHAIN_FILE=$WIND_CC_SYSROOT/mk/toolchain.cmake 2>&1 \
+          | tee $BUILD_DIR/$PKG_NAME/$PKG_LOG_DIR/stdout_stderr.log
+
+      - name: Compile package
+        id: compile
+        run: |
+          cd $BUILD_DIR/$PKG_NAME/$PKG_BUILD_DIR
+          make -j 8 2>&1 \
+          | tee -a $BUILD_DIR/$PKG_NAME/$PKG_LOG_DIR/stdout_stderr.log

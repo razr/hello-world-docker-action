@@ -2,7 +2,7 @@
   "inputs": {
     "sdk_name": "qemu",
     "vxworks_release": "24.03",
-    "repository_url": "https://github.com/leethomason/tinyxml2",
+    "repository_url": "https://github.com/eProsima/Fast-CDR",
     "repository_branch": "master"
   }
 }
