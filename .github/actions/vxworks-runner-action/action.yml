@@ -48,7 +48,8 @@ runs:
       id: extract-vxworks
       run: |
         if [ ! -f "/tmp/vxWorks" ]; then
-          tar -xvjf /tmp/${{ env.FILENAME }} --strip-components=4 -C /tmp "wrsdk-vxworks7-${{ inputs.sdk }}/vxsdk/bsps/*/vxWorks"
+          VXWORKS_PATH=$(tar -tvjf /tmp/${{ env.FILENAME }} | awk '{print $6}' | grep 'vxsdk/bsps/.*/vxWorks')
+          tar -xvjf /tmp/${{ env.FILENAME }} --strip-components=4 -C /tmp "$VXWORKS_PATH"
           ls -la /tmp/vxWorks
         else
           echo "VxWorks already extracted."
