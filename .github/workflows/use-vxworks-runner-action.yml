@@ -1,0 +1,47 @@
+# Run VxWorks using a callable workflow
+#
+# $ act workflow_dispatch -v -W .github/workflows/use-vxworks-runner-action.yml \
+#   -P ubuntu-22.04=catthehacker/ubuntu:act-22.04 \
+#   -e .github/actions/vxworks-runner-action/act-e.json
+#
+# $ cat .github/actions/vxworks-runner-action/act-e.json
+# {
+#  "inputs": {
+#    "sdk_name": "qemu",
+#    "vxworks_release": "24.03"
+#   }
+# }
+#
+
+name: 'Use vxworks-runner-action'
+run-name: Setup ${{ inputs.vxworks_release }} ${{ inputs.sdk_name }} SDK
+
+on:
+  workflow_dispatch:
+    inputs:
+      sdk_name:
+        description: 'SDK Name'
+        required: false
+        default: 'qemu'
+      vxworks_release:
+        description: 'VxWorks Release'
+        required: false
+        default: '24.03'
+
+jobs:
+  call-vxworks-runner-action:
+    runs-on: ubuntu-22.04
+    env:
+      sdk_name: ${{ github.event.inputs.sdk_name }}
+      vxworks_release: ${{ github.event.inputs.vxworks_release }}
+
+    steps:
+      - name: Checks-out a branch
+        uses: actions/checkout@v4
+
+      - name: Use vxworks-runner-action
+        uses: ./.github/actions/vxworks-runner-action
+        with:
+          sdk: $sdk_name
+          vxworks: $vxworks_release
+
