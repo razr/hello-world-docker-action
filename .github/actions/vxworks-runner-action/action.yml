@@ -68,27 +68,26 @@ runs:
         fi
       shell: bash
 
-- name: Install QEMU
-  id: install-qemu
-  run: |
-    case "${{ inputs.sdk }}" in
-      qemu)
-        sudo apt-get update && sudo apt-get install -y qemu-system-x86_64
-        echo "QEMU_RUN=qemu-system-x86_64 -m 2G -machine q35 -cpu Nehalem -kernel ${{ inputs.directory }}/vxWorks -display none -serial mon:stdio" >> $GITHUB_ENV
-        ;;
-      raspberrypi4b)
-        sudo apt-get update && sudo apt-get install -y qemu-system-aarch64
-        ;;
-      *)
-        echo "Unsupported SDK: ${{ inputs.sdk }}"
-        exit 1
-        ;;
-    esac
-  shell: bash
+    - name: Install QEMU
+      id: install-qemu
+      run: |
+        case "${{ inputs.sdk }}" in
+          qemu)
+            sudo apt-get update && sudo apt-get install -y qemu-system-x86_64
+            echo "QEMU_RUN=qemu-system-x86_64 -m 2G -machine q35 -cpu Nehalem -kernel ${{ inputs.directory }}/vxWorks -display none -serial mon:stdio" >> $GITHUB_ENV
+          ;;
+          raspberrypi4b)
+            sudo apt-get update && sudo apt-get install -y qemu-system-aarch64
+          ;;
+          *)
+            echo "Unsupported SDK: ${{ inputs.sdk }}"
+            exit 1
+          ;;
+        esac
+      shell: bash
 
-- name: Run VxWorks
-  id: run-vxworks
-  run: |
-    $QEMU_RUN
-  shell: bash
-
+    - name: Run VxWorks
+    id: run-vxworks
+    run: |
+      $QEMU_RUN
+    shell: bash
