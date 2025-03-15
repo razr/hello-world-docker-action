@@ -9,6 +9,18 @@ inputs:
     description: 'VxWorks Release'
     required: false
     default: '24.03'
+  directory:
+    description: 'Directory to download and extract VxWorks'
+    required: false
+    default: '/tmp'
+  commands:
+    description: 'Commands to run in the image, executed with a command interpreter'
+    required: true
+    default: 'C version'
+  debug:
+    description: 'Display commands as they are executed'
+    required: false
+    default: 'yes'
 runs:
   using: 'composite'
   steps:
@@ -28,8 +40,8 @@ runs:
       id: calculate-url
       run: |
         cd $GITHUB_ACTION_PATH
-        python ./parse_wrsdks.py wrsdks.json ${{ inputs.sdk }} ${{ inputs.vxworks }} > /tmp/sdk-url.txt
-        cd /tmp
+        python ./parse_wrsdks.py wrsdks.json ${{ inputs.sdk }} ${{ inputs.vxworks }} > ${{ inputs.directory }}/sdk-url.txt
+        cd ${{ inputs.directory }}
         echo SDK_URL=$(cat sdk-url.txt) >> $GITHUB_ENV
         echo FILENAME=$(basename $(cat sdk-url.txt)) >> $GITHUB_ENV
       shell: bash
@@ -37,8 +49,8 @@ runs:
     - name: Download SDK
       id: download-sdk
       run: |
-        if [ ! -f "/tmp/${{ env.FILENAME }}" ]; then
-          wget --no-check-certificate ${{ env.SDK_URL }} -P /tmp
+        if [ ! -f "${{ inputs.directory }}/${{ env.FILENAME }}" ]; then
+          wget --no-check-certificate ${{ env.SDK_URL }} -P ${{ inputs.directory }}
         else
           echo "SDK ${{ env.FILENAME }} already downloaded."
         fi
@@ -47,11 +59,36 @@ runs:
     - name: Extract VxWorks
       id: extract-vxworks
       run: |
-        if [ ! -f "/tmp/vxWorks" ]; then
-          VXWORKS_PATH=$(tar -tvjf /tmp/${{ env.FILENAME }} | awk '{print $6}' | grep 'vxsdk/bsps/.*/vxWorks')
-          tar -xvjf /tmp/${{ env.FILENAME }} --strip-components=4 -C /tmp "$VXWORKS_PATH"
-          ls -la /tmp/vxWorks
+        if [ ! -f "${{ inputs.directory }}/vxWorks" ]; then
+          VXWORKS_PATH=$(tar -tvjf ${{ inputs.directory }}/${{ env.FILENAME }} | awk '{print $6}' | grep 'vxsdk/bsps/.*/vxWorks')
+          tar -xvjf ${{ inputs.directory }}/${{ env.FILENAME }} --strip-components=4 -C ${{ inputs.directory }} "$VXWORKS_PATH"
+          ls -la ${{ inputs.directory }}/vxWorks
         else
           echo "VxWorks already extracted."
         fi
       shell: bash
+
+- name: Install QEMU
+  id: install-qemu
+  run: |
+    case "${{ inputs.sdk }}" in
+      qemu)
+        sudo apt-get update && sudo apt-get install -y qemu-system-x86_64
+        echo "QEMU_RUN=qemu-system-x86_64 -m 2G -machine q35 -cpu Nehalem -kernel ${{ inputs.directory }}/vxWorks -display none -serial mon:stdio" >> $GITHUB_ENV
+        ;;
+      raspberrypi4b)
+        sudo apt-get update && sudo apt-get install -y qemu-system-aarch64
+        ;;
+      *)
+        echo "Unsupported SDK: ${{ inputs.sdk }}"
+        exit 1
+        ;;
+    esac
+  shell: bash
+
+- name: Run VxWorks
+  id: run-vxworks
+  run: |
+    $QEMU_RUN
+  shell: bash
+
