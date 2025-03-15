@@ -87,7 +87,7 @@ runs:
       shell: bash
 
     - name: Run VxWorks
-    id: run-vxworks
-    run: |
-      $QEMU_RUN
-    shell: bash
+      id: run-vxworks
+      run: |
+        $QEMU_RUN
+      shell: bash
