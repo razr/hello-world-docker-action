@@ -73,11 +73,11 @@ runs:
       run: |
         case "${{ inputs.sdk }}" in
           qemu)
-            sudo apt-get update && sudo apt-get install -y qemu-system-x86_64
+            sudo apt-get update && sudo apt-get install -y qemu-system-x86
             echo "QEMU_RUN=qemu-system-x86_64 -m 2G -machine q35 -cpu Nehalem -kernel ${{ inputs.directory }}/vxWorks -display none -serial mon:stdio" >> $GITHUB_ENV
           ;;
           raspberrypi4b)
-            sudo apt-get update && sudo apt-get install -y qemu-system-aarch64
+            sudo apt-get update && sudo apt-get install -y qemu-system-arm
           ;;
           *)
             echo "Unsupported SDK: ${{ inputs.sdk }}"
