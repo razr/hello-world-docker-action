@@ -73,11 +73,10 @@ runs:
       run: |
         case "${{ inputs.sdk }}" in
           qemu)
-            sudo apt-get update && sudo apt-get install -y qemu-system-x86
-            echo "QEMU_RUN=qemu-system-x86_64 -m 2G -machine q35 -cpu Nehalem -kernel ${{ inputs.directory }}/vxWorks -display none -serial mon:stdio" >> $GITHUB_ENV
+            sudo apt-get update && sudo apt-get install -y qemu-system-x86 expect
           ;;
           raspberrypi4b)
-            sudo apt-get update && sudo apt-get install -y qemu-system-arm
+            sudo apt-get update && sudo apt-get install -y qemu-system-arm expect
           ;;
           *)
             echo "Unsupported SDK: ${{ inputs.sdk }}"
@@ -86,8 +85,15 @@ runs:
         esac
       shell: bash
 
+    - name: Prepare commands
+      id: prepare-commands
+      run: 
+        cat >> /tmp/commands <<"VXWORKS_RUNNER_INPUT_COMMANDS_EOF"
+        ${{ inputs.commands }}
+        VXWORKS_RUNNER_INPUT_COMMANDS_EOF
+
     - name: Run VxWorks
       id: run-vxworks
       run: |
-        $QEMU_RUN
+        expect ./run_vxworks_qemu.exp /tmp/commands
       shell: bash
