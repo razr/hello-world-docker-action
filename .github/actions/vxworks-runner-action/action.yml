@@ -87,7 +87,7 @@ runs:
 
     - name: Prepare commands
       id: prepare-commands
-      run: 
+      run: |
         cat >> /tmp/commands <<"VXWORKS_RUNNER_INPUT_COMMANDS_EOF"
         ${{ inputs.commands }}
         VXWORKS_RUNNER_INPUT_COMMANDS_EOF
