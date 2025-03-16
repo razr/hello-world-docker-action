@@ -1,0 +1,136 @@
+#!/usr/bin/expect
+
+# Function to send Ctrl-A X to QEMU to exit
+proc quit_qemu {} {
+    send "\001x"
+}
+
+# Function to check if a file exists
+proc file_exists {filepath} {
+    return [file exists $filepath]
+}
+
+# Function to check if QEMU is installed
+proc check_qemu {} {
+    if {[catch {exec which qemu-system-x86_64} result]} {
+        puts "Error: qemu-system-x86_64 not found. Please install QEMU."
+        exit 1
+    }
+}
+
+# Execute commands from file in VxWorks command interpreter
+
+proc run_commands {commands} {
+    foreach cmd $commands {
+        set cmd [string trim $cmd]
+        if {$cmd ne ""} {
+            send "$cmd\r"
+            expect {
+                -exact {[vxWorks *]#} {}
+                timeout { exit 1 }
+            }
+        }
+    }
+}
+
+# Check if QEMU exists
+check_qemu
+
+# Validate parameters
+if {[llength $argv] < 1} {
+    puts "Usage: run_vxworks.expect <commands_file> [kernel] [disk]"
+    exit 1
+}
+
+# First parameter: Commands file
+set commands_file [lindex $argv 0]
+
+# Check if commands file exists
+if {![file_exists $commands_file]} {
+    puts "Error: Commands file '$commands_file' not found."
+    exit 1
+}
+
+# Second parameter: Kernel image (optional, defaults to /tmp/vxWorks)
+set vxWorks_kernel_path "/tmp/vxWorks"
+if {[llength $argv] > 1} {
+    set vxWorks_kernel_path [lindex $argv 1]
+}
+
+# Check if kernel image exists
+if {![file_exists $vxWorks_kernel_path]} {
+    puts "Warning: VxWorks kernel not found at '$vxWorks_kernel_path'."
+    set vxWorks_kernel_path ""
+}
+
+# Third parameter: Disk image (optional, defaults to searching /tmp/)
+set disk_image ""
+if {[llength $argv] > 2} {
+    set disk_image [lindex $argv 2]
+} else {
+    # Try to find a disk image under /tmp
+    set disk_image [exec sh -c {find /tmp -maxdepth 1 -type f -name "*.img" | head -n 1} 2>/dev/null]
+}
+
+# Validate the disk image
+if {$disk_image eq "" || ![file_exists $disk_image]} {
+    puts "Warning: No valid disk image found. Proceeding without it."
+    set disk_image ""
+} else {
+    puts "Using disk image: $disk_image"
+}
+
+# Set timeout for Expect commands (in seconds)
+set timeout 60
+
+# Read commands from file
+set commands [split [exec cat $commands_file] "\n"]
+
+# Build QEMU command dynamically
+#set qemu_cmd "qemu-system-x86_64 -m 2G -machine q35 -cpu Nehalem -kernel $vxWorks_kernel_path -display none -serial mon:stdio"
+set qemu_cmd [list qemu-system-x86_64 -m 2G -machine q35 -cpu Nehalem -kernel /tmp/vxWorks -display none -serial mon:stdio]
+
+if {$disk_image ne ""} {
+    lappend qemu_cmd -append "bootline:fs(0,0)host:/vxWorks h=192.168.200.254 e=192.168.200.1 g=192.168.200.254 u=ftp pw=ftp123 o=gei0 s=/ata0/vxscript"
+    lappend qemu_cmd -device ich9-ahci,id=ahci
+    lappend qemu_cmd -drive file=$disk_image,if=none,id=vxdisk,format=raw
+    lappend qemu_cmd -device ide-hd,drive=vxdisk,bus=ahci.0
+} else {
+    lappend qemu_cmd -append "bootline:fs(0,0)host:/vxWorks h=192.168.200.254 e=192.168.200.1 g=192.168.200.254 u=ftp pw=ftp123 o=gei0"
+}
+
+# Start QEMU
+spawn {*}$qemu_cmd
+
+# Wait for the VxWorks shell prompt
+expect {
+    # make sure QEMU starts
+    -glob "Instantiating*" {
+        # QEMU started successfully, wait for the -> prompt
+        expect {
+            -re {->} {
+                # we got -> prompt, switch to the command interpreter
+                send "cmd\r"
+                expect -exact {[vxWorks}
+                
+                run_commands $commands
+ 
+                puts "\nAll commands done, quitting QEMU"
+                quit_qemu
+            }
+            timeout {
+                # Handle timeout if -> prompt is not encountered within the specified timeout
+                puts "Timeout: Did not receive -> prompt"
+                exit 1 ; # Exit the script if QEMU didn't reach the expected state within the timeout
+            }
+        }
+    }
+    timeout {
+        # Handle timeout if QEMU doesn't start within the specified timeout
+        puts "Timeout: QEMU did not start."
+    }
+}
+
+puts "All commands executed, exiting QEMU"
+quit_qemu
+
