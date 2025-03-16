@@ -95,5 +95,6 @@ runs:
     - name: Run VxWorks
       id: run-vxworks
       run: |
+        cd $GITHUB_ACTION_PATH
         expect ./run_vxworks_qemu.exp /tmp/commands
       shell: bash
